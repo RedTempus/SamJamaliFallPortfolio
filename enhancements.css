@@ -10,6 +10,77 @@
 .site-nav .nav-contact.active { color: var(--lime); }
 .nav-contact span { color: var(--cyan); }
 
+.status-card li a {
+  color: inherit;
+  text-decoration: none;
+  transition: color .2s ease, transform .2s ease;
+}
+
+.status-card li a:hover,
+.status-card li a:focus-visible {
+  color: var(--lime);
+  transform: translateX(3px);
+  outline: none;
+}
+
+/* Give the hero statement a hardware-specific visual field. */
+.home .hero {
+  isolation: isolate;
+  overflow: hidden;
+}
+.home .hero::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 5%;
+  left: -9vw;
+  width: min(900px, 88vw);
+  height: 72%;
+  opacity: .31;
+  background:
+    linear-gradient(90deg, rgba(7, 18, 15, .08), rgba(7, 18, 15, .76) 64%, rgba(7, 18, 15, 1)),
+    linear-gradient(0deg, rgba(7, 18, 15, .22), rgba(7, 18, 15, .66)),
+    url("genericPCBpic.png") center / cover no-repeat;
+  mask-image: linear-gradient(90deg, transparent, black 8%, black 76%, transparent), linear-gradient(0deg, transparent, black 13%, black 87%, transparent);
+  mask-composite: intersect;
+}
+
+.hardware-focus { position: relative; }
+.hardware-preview {
+  position: absolute;
+  right: -34px;
+  top: calc(100% + 10px);
+  z-index: 10;
+  width: 230px;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: center;
+  border: 1px solid rgba(185, 255, 75, .75);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, .5), 0 0 24px rgba(185, 255, 75, .16);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-7px) scale(.97);
+  transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+  pointer-events: none;
+}
+.hardware-preview-trigger:hover + .hardware-preview,
+.hardware-preview-trigger:focus-visible + .hardware-preview {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.project-full:target {
+  opacity: 1;
+  transform: none;
+  animation: project-target 1.05s ease-out both;
+}
+
+@keyframes project-target {
+  0%, 20% { border-color: var(--lime); box-shadow: 0 0 0 1px rgba(185, 255, 75, .9), 0 0 58px rgba(185, 255, 75, .42); }
+  100% { border-color: var(--line); box-shadow: none; }
+}
+
 /* Each light traces a vertical oval while travelling down the page. */
 .circuit-bg i {
   top: -12vh;
@@ -17,7 +88,7 @@
   width: var(--light-size, 7px);
   height: var(--light-size, 7px);
   animation: oval-descent var(--light-duration, 14s) linear infinite;
-  animation-delay: var(--light-delay, 0s);
+  animation-delay: calc(var(--light-delay, 0s) + var(--animation-offset, 0s));
 }
 .circuit-bg i:nth-child(1) { --light-x: 10%; --arc: 52px; --light-duration: 15s; --light-delay: -4s; }
 .circuit-bg i:nth-child(2) { --light-x: 83%; --arc: 75px; --light-size: 8px; --light-duration: 18s; --light-delay: -11s; }
@@ -25,6 +96,51 @@
 .circuit-bg i:nth-child(4) { --light-x: 91%; --arc: 34px; --light-size: 6px; --light-duration: 16s; --light-delay: -1s; }
 .circuit-bg i:nth-child(5) { --light-x: 62%; --arc: 66px; --light-size: 9px; --light-duration: 19s; --light-delay: -15s; }
 .circuit-bg i:nth-child(6) { --light-x: 66%; --arc: 39px; --light-duration: 12s; --light-delay: -6s; }
+
+/* Six matching radial slices originate at the center; their motion is mirrored in every wedge. */
+.circuit-bg {
+  inset: -2px;
+  min-height: 100dvh;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(108, 225, 220, .11), transparent 23rem),
+    radial-gradient(circle at 82% 8%, rgba(108, 225, 220, .12), transparent 28rem),
+    radial-gradient(circle at 10% 62%, rgba(185, 255, 75, .10), transparent 28rem),
+    var(--ink);
+}
+
+.circuit-bg::before {
+  opacity: .46;
+  background-image:
+    repeating-conic-gradient(from -30deg at 50% 50%, rgba(185, 255, 75, .06) 0deg 59.2deg, transparent 59.2deg 60deg),
+    repeating-radial-gradient(circle at 50% 50%, transparent 0 145px, rgba(108, 225, 220, .18) 146px 147px, transparent 148px 235px);
+  background-size: 100% 100%, 100% 100%;
+  mask-image: radial-gradient(circle at 50% 50%, black, rgba(0, 0, 0, .68) 48%, transparent 88%);
+  animation: reflected-slices 20s ease-in-out infinite;
+  animation-delay: var(--animation-offset, 0s);
+  transform-origin: 50% 50%;
+}
+
+.circuit-bg::after {
+  opacity: .28;
+  background-image:
+    linear-gradient(rgba(185, 255, 75, .16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(185, 255, 75, .16) 1px, transparent 1px);
+  background-size: 48px 48px;
+  animation: none;
+  filter: none;
+  transform: none;
+}
+
+.circuit-bg i {
+  z-index: 2;
+}
+
+@keyframes reflected-slices {
+  0%, 100% { opacity: .30; transform: scale(.99); filter: brightness(.95); }
+  50% { opacity: .58; transform: scale(1.025); filter: brightness(1.12); }
+}
 
 @keyframes oval-descent {
   0% { transform: translate3d(0, -10vh, 0); opacity: 0; }
@@ -69,11 +185,62 @@
 .research-points h3 { margin: 10px 0 8px; font-size: 1.1rem; letter-spacing: -.03em; }
 .research-points p { margin: 0; color: var(--muted); font-size: .84rem; }
 
+/* Keep the dark circuit field visible even when a browser is heavily zoomed. */
+html, body { min-height: 100%; background: var(--ink); }
+body { min-height: 100dvh; }
+
+/* Content always sits above the decorative fixed background. */
+.site-header,
+main,
+.site-footer {
+  position: relative;
+  z-index: 2;
+}
+main > section { position: relative; z-index: 2; }
+.circuit-bg,
+.circuit-bg::before,
+.circuit-bg::after,
+.circuit-bg i { pointer-events: none; }
+
+.card-hit-area { position: absolute; inset: 0; z-index: 3; }
+.featured-card .mini-mark { z-index: 2; }
+
+/* Project detail rows reserve three quarters of their width for imagery. */
+.projects-list { display: flex; flex-direction: column; gap: 20px; }
+.project-full {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(275px, 1fr);
+  min-height: 290px;
+}
+.project-full .photo-placeholder { height: auto; min-height: 290px; }
+.project-full > div:last-child { padding: 30px; align-self: center; }
+.photo-placeholder.has-project-image { display: block; overflow: hidden; background: #06180c; }
+.photo-placeholder.has-project-image img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; filter: saturate(.86) contrast(1.08); }
+
+.contact-grid { scroll-margin-top: 90px; }
+.contact-grid:target a:nth-of-type(-n + 2) { animation: contact-target 1.2s ease-out both; }
+@keyframes contact-target {
+  0%, 25% { background: rgba(185, 255, 75, .18); box-shadow: inset 0 0 0 1px rgba(185, 255, 75, .85), 0 0 32px rgba(185, 255, 75, .22); }
+  100% { background: transparent; box-shadow: none; }
+}
+
 @media (max-width: 680px) {
   .site-nav .nav-contact { margin: 8px 0 0; padding: 12px; }
   .circuit-bg i:nth-child(n) { --arc: 28px; }
+  .hardware-preview { right: 0; width: min(230px, calc(100vw - 64px)); }
+  .home .hero::before { left: -20vw; width: 125vw; height: 63%; opacity: .24; }
   .research-section { grid-template-columns: 1fr; gap: 22px; margin-bottom: 65px; padding: 25px; }
   .research-points { grid-template-columns: 1fr; }
   .research-points article { padding: 18px 0; }
   .research-points article + article { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
+  .project-full { grid-template-columns: 1fr; min-height: 0; }
+  .project-full .photo-placeholder { min-height: 220px; }
+  .project-full > div:last-child { padding: 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .circuit-bg i,
+  .circuit-bg::before,
+  .project-full:target,
+  .contact-grid:target a:nth-of-type(-n + 2) { animation: none; }
 }
