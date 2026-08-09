@@ -23,6 +23,28 @@
   outline: none;
 }
 
+/* Give the hero statement a hardware-specific visual field. */
+.home .hero {
+  isolation: isolate;
+  overflow: hidden;
+}
+.home .hero::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 5%;
+  left: -9vw;
+  width: min(900px, 88vw);
+  height: 72%;
+  opacity: .31;
+  background:
+    linear-gradient(90deg, rgba(7, 18, 15, .08), rgba(7, 18, 15, .76) 64%, rgba(7, 18, 15, 1)),
+    linear-gradient(0deg, rgba(7, 18, 15, .22), rgba(7, 18, 15, .66)),
+    url("genericPCBpic.png") center / cover no-repeat;
+  mask-image: linear-gradient(90deg, transparent, black 8%, black 76%, transparent), linear-gradient(0deg, transparent, black 13%, black 87%, transparent);
+  mask-composite: intersect;
+}
+
 .hardware-focus { position: relative; }
 .hardware-preview {
   position: absolute;
@@ -206,6 +228,7 @@ main > section { position: relative; z-index: 2; }
   .site-nav .nav-contact { margin: 8px 0 0; padding: 12px; }
   .circuit-bg i:nth-child(n) { --arc: 28px; }
   .hardware-preview { right: 0; width: min(230px, calc(100vw - 64px)); }
+  .home .hero::before { left: -20vw; width: 125vw; height: 63%; opacity: .24; }
   .research-section { grid-template-columns: 1fr; gap: 22px; margin-bottom: 65px; padding: 25px; }
   .research-points { grid-template-columns: 1fr; }
   .research-points article { padding: 18px 0; }
