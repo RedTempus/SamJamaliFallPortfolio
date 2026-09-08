@@ -47,3 +47,30 @@ if (window.location.hash === '#contact-details') {
     contactDetails?.scrollIntoView({ block: 'center', behavior: 'smooth' });
   }));
 }
+
+document.querySelectorAll('[data-carousel]').forEach((carousel) => {
+  const slides = [...carousel.querySelectorAll('.carousel-slide')];
+  const previous = carousel.querySelector('.carousel-prev');
+  const next = carousel.querySelector('.carousel-next');
+  const current = carousel.querySelector('.carousel-current');
+  const total = carousel.querySelector('.carousel-total');
+  let index = 0;
+  let touchStartX = null;
+
+  total.textContent = slides.length;
+  const showSlide = (nextIndex) => {
+    index = (nextIndex + slides.length) % slides.length;
+    slides.forEach((slide, slideIndex) => slide.classList.toggle('is-active', slideIndex === index));
+    current.textContent = index + 1;
+  };
+
+  previous.addEventListener('click', () => showSlide(index - 1));
+  next.addEventListener('click', () => showSlide(index + 1));
+  carousel.addEventListener('touchstart', (event) => { touchStartX = event.changedTouches[0].screenX; }, { passive: true });
+  carousel.addEventListener('touchend', (event) => {
+    if (touchStartX === null) return;
+    const distance = event.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(distance) > 40) showSlide(index + (distance < 0 ? 1 : -1));
+    touchStartX = null;
+  }, { passive: true });
+});
